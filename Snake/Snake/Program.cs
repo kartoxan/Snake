@@ -10,6 +10,11 @@ namespace Snake
     {
         static void Main(string[] args)
         {
+            Field f = new Field(25,25);
+
+            f.DrawField();
+
+            Console.ReadKey();
         }
     }
 }
