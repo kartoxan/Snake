@@ -45,7 +45,8 @@ namespace Snake
 
         public void DrawField()
         {
-            for(int i = 0; i < field.GetLength(0); i++)
+            Console.SetCursorPosition(0, 0);
+            for (int i = 0; i < field.GetLength(0); i++)
             {
                 for(int j = 0; j < field.GetLength(1); j++)
                 {
@@ -55,11 +56,58 @@ namespace Snake
             }
         }
 
+        public void DrawSnake(List<ElementSnake> snake)
+        {
+            RemoveSnake();
+            foreach(ElementSnake s in snake)
+            {
+                if(s.draw)
+                {
+                    field[s.y, s.x * 2 ] = '■';
+                }
+            }
+        }
+
+        public void RemoveSnake()
+        {
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
+                    if(field[i,j] == '■')
+                    {
+                        field[i,j] = '·';
+                    }
+                }
+            }
+        }
+
         public void DrawField(int x, int y)
         {
             Console.SetCursorPosition(x, y);
+            
             DrawField();
         }
+
+        public void addEat()
+        {
+            Random r = new Random();
+            int x,y;
+            do
+            {
+
+                x = r.Next(1, height);
+                y = r.Next(1, width) * 2;
+            } while (field[x, y] != '·');
+            field[x,y] = 'x';
+        }
+
+        public char getChar(int x, int y)
+        {
+            return field[y , x * 2];
+        }
+
+
 
 
     }
