@@ -8,26 +8,12 @@ namespace Snake
 {
     class Program
     {
+
         static void Main(string[] args)
-        {
-
-            
-
-                
-
-
-
-                
-            
+        {   
             Console.CursorVisible = false;
-
-            Game game = new Game();
-
-            game.PrintMenu();
-
-
-            
-            
+            Game g = new Game();
+            g.MainMenu();
         }
     }
 }

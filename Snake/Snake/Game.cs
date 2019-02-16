@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 using System.Threading;
-
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Snake
 {
@@ -13,8 +14,14 @@ namespace Snake
     {
         Field field;
         Snake Snake;
-        TableRecords table;
+        TableRecords table = new TableRecords();
+
+
+
         int Score;
+
+
+        //ConsoleKeyInfo keypress = new ConsoleKeyInfo();
 
 
         public ConsoleKeyInfo keypress = new ConsoleKeyInfo();
@@ -23,20 +30,25 @@ namespace Snake
 
         int Speed;
 
+        int CursorPosition;
 
-        public void PrintMenu()
+        public void MainMenu()
         {
-            if (table == null)
-                table = new TableRecords();
+
+
 
             bool Exit = true;
             do
             {
 
                 Console.Clear();
-                Console.WriteLine("Press any button to start.");
+                Console.WriteLine("Press any button to start new game.");
                 Console.WriteLine("Press E to exit.");
                 Console.WriteLine("Press R to show records.");
+                if(File.Exists("SavedGame.dat"))
+                {
+                    Console.WriteLine("Press L to load game.");
+                }
                 //Console.WriteLine("Press O to show options");
 
 
@@ -47,12 +59,23 @@ namespace Snake
                 {
                     case ConsoleKey.R:
                         {
+                            
                             table.ShowTable();
+
                             break;
                         }
                     case ConsoleKey.E:
                         {
                             Exit = false;
+                            break;
+                        }
+                    case ConsoleKey.L:
+                        {
+                            if (File.Exists("SavedGame.dat"))
+                            {
+                                LoadGame();
+                            }
+                            
                             break;
                         }
                     default:
@@ -65,7 +88,92 @@ namespace Snake
 
         }
 
-        void CheckInput()
+        public bool Pause()
+        {
+            Console.CursorTop = CursorPosition + 1;
+            Console.WriteLine("Press any button to continue.");
+            Console.WriteLine("Press E to exit to menu.");
+            Console.WriteLine("Press S to save and exit.");
+
+
+            keypress = Console.ReadKey(true);
+
+            switch (keypress.Key)
+            {
+                case ConsoleKey.S:
+                    {
+                        SaveGame();
+                        return true;
+                    }
+                case ConsoleKey.E:
+                    {
+                        return true;
+                    }
+                default:
+                    {
+                        
+                        break;
+                    }
+            }
+
+            return false;
+        }
+
+        public void SaveGame()
+        {
+            SavedGame S = new SavedGame(Snake, field , Score, Speed);
+
+            FileStream fileStream = File.Create("SavedGame.dat");
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+            binaryFormatter.Serialize(fileStream, S);
+            fileStream.Close();
+
+
+
+
+
+        }
+
+        public void LoadGame()
+        {
+            try
+            {
+                SavedGame S;
+                FileStream fileStream = File.OpenRead("SavedGame.dat");
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+
+                S = binaryFormatter.Deserialize(fileStream) as SavedGame;
+                fileStream.Close();
+
+                if(S != null)
+                {
+                    Snake = S.snake;
+                    field = new Field(S.height,S.width);
+                    
+                    Score = S.Score;
+                    Speed = S.Speed;
+                    field.DrawField();
+                    field.AddEat(S.eat);
+
+                    gameOver = false;
+
+
+
+                    
+                    game();
+                    File.Delete("SavedGame.dat");
+                }
+                
+            }
+            catch
+            {
+                
+            }
+        }
+
+        bool CheckInput()
         {
             while (Console.KeyAvailable)
             {
@@ -75,7 +183,7 @@ namespace Snake
 
                 if (keypress.Key == ConsoleKey.S)
                 {
-
+                    return true;
                 }
                 else if (keypress.Key == ConsoleKey.LeftArrow)
                 {
@@ -96,7 +204,7 @@ namespace Snake
                 }
             }
 
-            
+            return false;
         }
 
         public void StartGame()
@@ -110,14 +218,29 @@ namespace Snake
             field.addEat();
             field.DrawField();
 
+            
+
             game();
         }
 
         public void game()
         {
-            while(!gameOver)
+            CursorPosition = Console.CursorTop;
+            Console.WriteLine("You score: {0}", Score);
+            Console.WriteLine("Press S to pause.");
+            while (!gameOver)
             {
-                CheckInput();
+                if(CheckInput())
+                {
+                    if(Pause())
+                    {
+                        break;
+                    }
+                    Console.Clear();
+                    Console.CursorTop = CursorPosition;
+                    Console.WriteLine("You score: {0}", Score);
+                    Console.WriteLine("Press S to pause.");
+                }
                 Snake.Step();
 
                 Step();
@@ -126,15 +249,17 @@ namespace Snake
                 field.DrawField();
                 Thread.Sleep(Speed);
             }
+            if(gameOver)
+            {
+                GameOver();
+            }
 
-            GameOver();
+            
         }
 
         public void GameOver()
         {
             Console.Clear();
-            //Console.WriteLine("Your score: {0}.", Score );
-            //Console.WriteLine("Press any button.");
             
             if(table == null)
                 table = new TableRecords();
@@ -143,7 +268,6 @@ namespace Snake
             table.ShowTable();
 
            
-            Console.ReadKey();
             
         }
 
@@ -166,20 +290,19 @@ namespace Snake
                         Snake.Eat(Snake.snake[0].x, Snake.snake[0].y);
                         field.addEat();
                         Score += 20;
+                        Console.CursorTop = CursorPosition;
+                        Console.WriteLine("You score: {0}", Score);
                         if (Score % 100 == 0 && Speed != 0)
                         {
                             Speed -= 5;
                         }
 
 
+
                         break;
                     }
             }
         }
-            
-
-
-
 
 
     }

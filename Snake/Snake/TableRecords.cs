@@ -66,15 +66,26 @@ namespace Snake
            }
            else
            {
-                for(int i = 0; i < myRecords.Count; i++ )
+                bool notRecord = true;
+                for (int i = 0; i < myRecords.Count; i++ )
                 {
                     if(myRecords[i].Score < Score )
                     {
                         newRecords(Score);
+                        notRecord = false;
                         break;
                     }
+                    
                 }
-           }
+                if (notRecord)
+                {
+                    Console.WriteLine("You score: {0}", Score);
+                    Console.WriteLine("Press any button.");
+                    Console.ReadKey();
+                }
+            }
+
+            Console.WriteLine("You score: {0}", Score);
         }
 
         public void newRecords(int Score)

@@ -4,13 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Snake
 {
+    [Serializable]
+    struct Eat//нужно для сохранения
+    {
+        public int x;
+        public int y;
+
+        public Eat(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     class Field
     {
-        private int height;
-        private int width;
+        public int height;
+        public int width;
         private char[,] field;
+
+        public Eat eat;//нужно для сохранения
+
+        
+            
+
 
         public Field(int H,int W)
         {
@@ -43,6 +63,8 @@ namespace Snake
                     field[i, j] = '·';
                 }
             }
+            if(eat.x != 0 && eat.y != 0)
+                field[eat.x, eat.y] = 'x';
 
         }
 
@@ -61,6 +83,7 @@ namespace Snake
                 }
                 Console.WriteLine();
             }
+            
         }
 
         public void DrawSnake(List<ElementSnake> snake)
@@ -106,7 +129,15 @@ namespace Snake
                 x = r.Next(1, height);
                 y = r.Next(1, width) * 2;
             } while (field[x, y] != '·');
+            eat = new Eat(x,y);
             field[x,y] = 'x';
+        }
+
+        public void AddEat(Eat eat)
+        {
+            if (eat.x != 0 && eat.y != 0)
+                field[eat.x, eat.y] = 'x';
+            this.eat = eat;
         }
 
         public char getChar(int x, int y)

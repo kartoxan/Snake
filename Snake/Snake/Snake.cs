@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace Snake
 {
     enum direction
@@ -14,6 +16,7 @@ namespace Snake
         right,
     }
 
+    [Serializable]
     struct ElementSnake
     {
         public int x;
@@ -30,6 +33,7 @@ namespace Snake
         public ElementSnake(int x, int y) : this(x, y, true) { }
     }
 
+    [Serializable]
     class Snake
     {
         public direction preDirection;
