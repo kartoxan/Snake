@@ -10,15 +10,21 @@ namespace Snake
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Press any button to start.");
 
-            Console.ReadKey();
+            
 
+                
+
+
+
+                
+            
             Console.CursorVisible = false;
 
             Game game = new Game();
 
-            game.StartGmae();
+            game.PrintMenu();
+
 
             
             
