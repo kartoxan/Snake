@@ -16,7 +16,10 @@ namespace Snake
 
         public bool changes { get; private set; }
 
-
+        public void ChangesTrue()
+        {
+            changes = true;
+        }
 
         public Fragment_Field(char c, ConsoleColor color, int x, int y)
         {
@@ -53,6 +56,7 @@ namespace Snake
         {
             if (changes)
             {
+                
                 Console.CursorVisible = false;
                 Console.ForegroundColor = color;
                 Console.SetCursorPosition(x, y);

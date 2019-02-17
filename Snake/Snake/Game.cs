@@ -30,8 +30,8 @@ namespace Snake
 
         int Speed;
 
-        int CursorPositionTop;
-        int CursorPositionLeft = 0;
+        int CursorPositionTop = 26;
+        int CursorPositionLeft = 5;
 
         public void MainMenu()
         {
@@ -43,13 +43,24 @@ namespace Snake
             {
 
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.CursorTop = 3;
+                Console.CursorLeft = 30; 
+                Console.WriteLine("SNAKE");
+                Console.ResetColor();
+                Console.CursorLeft = 28;
+                Console.WriteLine("Main Menu");
+                Console.CursorLeft = 15;
                 Console.WriteLine("Press any button to start new game.");
-                Console.WriteLine("Press E to exit.");
+                Console.CursorLeft = 15;
                 Console.WriteLine("Press R to show records.");
                 if(File.Exists("SavedGame.dat"))
                 {
+                    Console.CursorLeft = 15;
                     Console.WriteLine("Press L to load game.");
                 }
+                Console.CursorLeft = 15;
+                Console.WriteLine("Press E to exit.");
                 //Console.WriteLine("Press O to show options");
 
 
@@ -94,7 +105,9 @@ namespace Snake
             Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
             
             Console.WriteLine("Press any button to continue.");
+            Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 2);
             Console.WriteLine("Press E to exit to menu.");
+            Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 3);
             Console.WriteLine("Press S to save and exit.");
 
 
@@ -164,7 +177,7 @@ namespace Snake
 
 
                     
-                    game();
+                    Step();
                     File.Delete("SavedGame.dat");
                 }
                 
@@ -211,9 +224,11 @@ namespace Snake
 
         public void StartGame()
         {
+
+            
             gameOver = false;
             Score = 0;
-            Speed = 100;
+            Speed = 200;
             field = new Field(25, 25);
             Snake = new Snake(10,10);
             field.DrawSnake(Snake.snake);
@@ -222,14 +237,15 @@ namespace Snake
 
             
 
-            game();
+            Step();
         }
 
-        public void game()
+        public void Step()
         {
-            CursorPositionTop = Console.CursorTop;
+            //CursorPositionTop = Console.CursorTop;
             Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
             Console.WriteLine("You score: {0}", Score);
+            Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 2);
             Console.WriteLine("Press S to pause.");
 
 
@@ -244,13 +260,16 @@ namespace Snake
                         break;
                     }
                     Console.Clear();
+                    field.ResetChanges();
                     Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
+                    
                     Console.WriteLine("You score: {0}", Score);
+                    Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 2);
                     Console.WriteLine("Press S to pause.");
                 }
                 Snake.Step();
 
-                Step();
+                Logic();
 
                 field.DrawSnake(Snake.snake);
                 field.DrawField();
@@ -279,7 +298,7 @@ namespace Snake
         }
 
 
-        private void Step()
+        private void Logic()
         {
             char c = field.getChar(Snake.snake[0].x,Snake.snake[0].y);
             switch (c)

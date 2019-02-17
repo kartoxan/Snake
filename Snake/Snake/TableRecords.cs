@@ -79,7 +79,12 @@ namespace Snake
                 }
                 if (notRecord)
                 {
+                    Console.SetCursorPosition(28, 2);
+                    Console.WriteLine("SCORE");
+                    Console.WriteLine();
+                    Console.CursorLeft = 25;
                     Console.WriteLine("You score: {0}", Score);
+                    Console.CursorLeft = 23;
                     Console.WriteLine("Press any button.");
                     Console.ReadKey();
                 }
@@ -90,9 +95,16 @@ namespace Snake
 
         public void newRecords(int Score)
         {
+            Console.SetCursorPosition(28, 2);
+            Console.WriteLine("SCORE");
+            Console.WriteLine();
+            Console.CursorLeft = 25;
             Console.WriteLine("New record: {0}", Score);
-            Console.WriteLine("Enter your name:");
+            Console.WindowTop = 23;
+            Console.WriteLine("Enter your name:");  
+            Console.CursorLeft = 23;
             Console.CursorVisible = true;
+
             string Name = Console.ReadLine();
             if(Name.Length > 10)
                 Name = Name.Substring(0, 10);
@@ -124,15 +136,23 @@ namespace Snake
         public void ShowTable()
         {
             Console.Clear();
+            Console.SetCursorPosition(28, 2);
+            Console.WriteLine("TABLE SCORE");
+            Console.CursorLeft = 22;
             Console.WriteLine("┌──┬──────────┬─────┐");
+            Console.CursorLeft = 22;
             Console.WriteLine("│{0,-2}│{1,-10}│{2,-5}│", "  ", "Name", "Score");
             
             for (int i = 0; i < myRecords.Count ; i++)
             {
+                Console.CursorLeft = 22;
                 Console.WriteLine("├──┼──────────┼─────┤");
+                Console.CursorLeft = 22;
                 Console.WriteLine("│{0,-2}│{1,-10}│{2,-5}│", i+1, myRecords[i].Name, myRecords[i].Score);
             }
+            Console.CursorLeft = 22;
             Console.WriteLine("└──┴──────────┴─────┘");
+            Console.CursorLeft = 22;
             Console.WriteLine("Press any button.");
             Console.ReadKey();
         }

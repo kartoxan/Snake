@@ -40,12 +40,7 @@ namespace Snake
 
 
 
-            /*
-            if(Console.WindowWidth < field.GetLength(1))
-                Console.SetWindowSize(field.GetLength(1) , field.GetLength(0) + 1);
-            if(Console.WindowHeight < field.GetLength(0))
-                Console.SetWindowSize(field.GetLength(1), field.GetLength(0) + 1);
-            */
+            
             CreateField();
         }
 
@@ -79,6 +74,8 @@ namespace Snake
                 }
             }
 
+            DrawField(5, 0);
+
             //if(eat.x != 0 && eat.y != 0)
             //    field[eat.x, eat.y] = 'x';
 
@@ -100,6 +97,30 @@ namespace Snake
                 //Console.WriteLine();
             }
             
+        }
+
+        public void ResetChanges()
+        {
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
+                    field[i, j].ChangesTrue();
+                }
+            }
+        }
+
+        public void DrawField(int x, int y)
+        {
+            Console.Clear();
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
+                    field[i, j].setPosition(j + x, i + y);
+                }
+            }
+            DrawField();
         }
 
         public void DrawSnake(List<ElementSnake> snake)
