@@ -24,7 +24,7 @@ namespace Snake
     {
         public int height;
         public int width;
-        private char[,] field;
+        private Fragment_Field[,] field;
 
         public Eat eat;//нужно для сохранения
 
@@ -36,35 +36,51 @@ namespace Snake
         {
             height = H;
             width = W;
-            field = new char[height + 2, (width * 2) + 3];
+            field = new Fragment_Field[height + 2, (width * 2) + 3];
+
+
+
+            /*
             if(Console.WindowWidth < field.GetLength(1))
                 Console.SetWindowSize(field.GetLength(1) , field.GetLength(0) + 1);
             if(Console.WindowHeight < field.GetLength(0))
                 Console.SetWindowSize(field.GetLength(1), field.GetLength(0) + 1);
-
+            */
             CreateField();
         }
 
         private void CreateField()
         {
-            
+
             for (int i = 0; i < field.GetLength(1); i++)
             {
-                field[0, i] = '▄';
-                field[field.GetLength(0) - 1, i] = '▀';
+                field[0, i] = new Fragment_Field('▄', ConsoleColor.Gray,i, 0);
+                field[field.GetLength(0) - 1, i] = new Fragment_Field('▀', ConsoleColor.Gray,i, field.GetLength(0) - 1);
             }
 
-            for(int i = 1; i < field.GetLength(0) - 1;i++)
+            for (int i = 1; i < field.GetLength(0) - 1; i++)
             {
-                field[i, 0] = '█';
-                field[i, field.GetLength(1) - 1] = '█';
+                field[i, 0] = new Fragment_Field('█' , ConsoleColor.Gray, 0,i);
+                field[i, field.GetLength(1) - 1] = new Fragment_Field('█', ConsoleColor.Gray, field.GetLength(1) - 1,i);
                 for (int j = 2; j < field.GetLength(1) - 1; j += 2)
                 {
-                    field[i, j] = '·';
+                    field[i, j] = new Fragment_Field('·',ConsoleColor.Gray, j,i);
                 }
             }
-            if(eat.x != 0 && eat.y != 0)
-                field[eat.x, eat.y] = 'x';
+
+            for (int i = 0; i < field.GetLength(0) - 1; i++)
+            {
+                for (int j = 0; j < field.GetLength(1) - 1; j++)
+                {
+                    if(field[i,j] == null)
+                    {
+                        field[i, j] = new Fragment_Field(j, i);
+                    }
+                }
+            }
+
+            //if(eat.x != 0 && eat.y != 0)
+            //    field[eat.x, eat.y] = 'x';
 
         }
 
@@ -73,15 +89,15 @@ namespace Snake
         public void DrawField()
         {
             
-            Console.SetCursorPosition(0, 0);
+            //Console.SetCursorPosition(0, 0);
             
             for (int i = 0; i < field.GetLength(0); i++)
             {
                 for(int j = 0; j < field.GetLength(1); j++)
                 {
-                    Console.Write(field[i, j]);
+                    field[i, j].Print();
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
             }
             
         }
@@ -89,11 +105,14 @@ namespace Snake
         public void DrawSnake(List<ElementSnake> snake)
         {
             RemoveSnake();
+            
             foreach(ElementSnake s in snake)
             {
                 if(s.draw)
                 {
-                    field[s.y, s.x * 2 ] = '■';
+                    
+                    field[s.y, s.x * 2].setCaracter('■');
+                    field[s.y, s.x * 2].setColor(ConsoleColor.Green);
                 }
             }
         }
@@ -104,20 +123,17 @@ namespace Snake
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if(field[i,j] == '■')
+                    
+                    if (field[i, j].c == '■')
                     {
-                        field[i,j] = '·';
+                        field[i, j].setCaracter('·');
+                        field[i, j].setColor(ConsoleColor.Gray);
                     }
+                    
                 }
             }
         }
 
-        public void DrawField(int x, int y)
-        {
-            Console.SetCursorPosition(x, y);
-            
-            DrawField();
-        }
 
         public void addEat()
         {
@@ -128,21 +144,23 @@ namespace Snake
 
                 x = r.Next(1, height);
                 y = r.Next(1, width) * 2;
-            } while (field[x, y] != '·');
+            } while (field[x, y].c != '·');
             eat = new Eat(x,y);
-            field[x,y] = 'x';
+            field[x,y].setCaracter('x');
+            field[x, y].setColor(ConsoleColor.Yellow);
+
         }
 
         public void AddEat(Eat eat)
         {
             if (eat.x != 0 && eat.y != 0)
-                field[eat.x, eat.y] = 'x';
+                field[eat.x, eat.y].setCaracter('x');
             this.eat = eat;
         }
 
         public char getChar(int x, int y)
         {
-            return field[y , x * 2];
+            return field[y , x * 2].c;
         }
 
 

@@ -30,7 +30,8 @@ namespace Snake
 
         int Speed;
 
-        int CursorPosition;
+        int CursorPositionTop;
+        int CursorPositionLeft = 0;
 
         public void MainMenu()
         {
@@ -90,7 +91,8 @@ namespace Snake
 
         public bool Pause()
         {
-            Console.CursorTop = CursorPosition + 1;
+            Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
+            
             Console.WriteLine("Press any button to continue.");
             Console.WriteLine("Press E to exit to menu.");
             Console.WriteLine("Press S to save and exit.");
@@ -225,9 +227,14 @@ namespace Snake
 
         public void game()
         {
-            CursorPosition = Console.CursorTop;
+            CursorPositionTop = Console.CursorTop;
+            Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
             Console.WriteLine("You score: {0}", Score);
             Console.WriteLine("Press S to pause.");
+
+
+
+
             while (!gameOver)
             {
                 if(CheckInput())
@@ -237,7 +244,7 @@ namespace Snake
                         break;
                     }
                     Console.Clear();
-                    Console.CursorTop = CursorPosition;
+                    Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
                     Console.WriteLine("You score: {0}", Score);
                     Console.WriteLine("Press S to pause.");
                 }
@@ -290,7 +297,7 @@ namespace Snake
                         Snake.Eat(Snake.snake[0].x, Snake.snake[0].y);
                         field.addEat();
                         Score += 20;
-                        Console.CursorTop = CursorPosition;
+                        Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
                         Console.WriteLine("You score: {0}", Score);
                         if (Score % 100 == 0 && Speed != 0)
                         {
@@ -302,6 +309,7 @@ namespace Snake
                         break;
                     }
             }
+            
         }
 
 
