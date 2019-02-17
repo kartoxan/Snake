@@ -11,7 +11,7 @@ namespace Snake
 
         static void Main(string[] args)
         {
-            Console.ReadKey();
+            
             Console.SetWindowSize(63, 31 );
             
 

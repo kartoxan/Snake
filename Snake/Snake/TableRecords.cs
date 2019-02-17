@@ -100,7 +100,7 @@ namespace Snake
             Console.WriteLine();
             Console.CursorLeft = 25;
             Console.WriteLine("New record: {0}", Score);
-            Console.WindowTop = 23;
+            Console.CursorLeft = 23;
             Console.WriteLine("Enter your name:");  
             Console.CursorLeft = 23;
             Console.CursorVisible = true;

@@ -54,13 +54,20 @@ namespace Snake
                 Console.WriteLine("Press any button to start new game.");
                 Console.CursorLeft = 15;
                 Console.WriteLine("Press R to show records.");
-                if(File.Exists("SavedGame.dat"))
+                
+                if (File.Exists("SavedGame.dat"))
                 {
                     Console.CursorLeft = 15;
                     Console.WriteLine("Press L to load game.");
                 }
                 Console.CursorLeft = 15;
                 Console.WriteLine("Press E to exit.");
+
+                Console.WriteLine();
+                Console.CursorLeft = 15;
+                Console.WriteLine("Creator: Antoniy Vizer.");
+
+
                 //Console.WriteLine("Press O to show options");
 
 
@@ -102,6 +109,7 @@ namespace Snake
 
         public bool Pause()
         {
+
             Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 1);
             
             Console.WriteLine("Press any button to continue.");
@@ -248,8 +256,7 @@ namespace Snake
             Console.SetCursorPosition(CursorPositionLeft, CursorPositionTop + 2);
             Console.WriteLine("Press S to pause.");
 
-
-
+            
 
             while (!gameOver)
             {
@@ -273,6 +280,7 @@ namespace Snake
 
                 field.DrawSnake(Snake.snake);
                 field.DrawField();
+
                 Thread.Sleep(Speed);
             }
             if(gameOver)

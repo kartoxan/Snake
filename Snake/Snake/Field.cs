@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace Snake
@@ -28,7 +28,6 @@ namespace Snake
 
         public Eat eat;//нужно для сохранения
 
-        
             
 
 
@@ -178,6 +177,11 @@ namespace Snake
                 field[eat.x, eat.y].setCaracter('x');
             this.eat = eat;
         }
+
+        
+
+
+        
 
         public char getChar(int x, int y)
         {
