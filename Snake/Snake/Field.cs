@@ -45,7 +45,6 @@ namespace Snake
 
         private void CreateField()
         {
-
             for (int i = 0; i < field.GetLength(1); i++)
             {
                 field[0, i] = new Fragment_Field('▄', ConsoleColor.Gray,i, 0);
@@ -61,6 +60,9 @@ namespace Snake
                     field[i, j] = new Fragment_Field('·',ConsoleColor.Gray, j,i);
                 }
             }
+
+            
+
 
             for (int i = 0; i < field.GetLength(0) - 1; i++)
             {
@@ -144,7 +146,7 @@ namespace Snake
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
                     
-                    if (field[i, j].c == '■')
+                    if (field[i, j].oldCharacter == '■')
                     {
                         field[i, j].setCaracter('·');
                         field[i, j].setColor(ConsoleColor.Gray);
@@ -164,7 +166,7 @@ namespace Snake
 
                 x = r.Next(1, height);
                 y = r.Next(1, width) * 2;
-            } while (field[x, y].c != '·');
+            } while (field[x, y].oldCharacter != '·');
             eat = new Eat(x,y);
             field[x,y].setCaracter('x');
             field[x, y].setColor(ConsoleColor.Yellow);
@@ -185,7 +187,7 @@ namespace Snake
 
         public char getChar(int x, int y)
         {
-            return field[y , x * 2].c;
+            return field[y , x * 2].oldCharacter;
         }
 
 

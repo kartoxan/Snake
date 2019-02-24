@@ -8,9 +8,10 @@ namespace Snake
 {
     class Fragment_Field
     {
-        public char c { get; private set;}
-        public ConsoleColor color { get; private set;}
-
+        public char oldCharacter { get; private set;}
+        public char newCharacter;
+        public ConsoleColor oldColor { get; private set;}
+        public ConsoleColor newColor;
         int x;
         int y;
 
@@ -19,12 +20,16 @@ namespace Snake
         public void ChangesTrue()
         {
             changes = true;
+            newCharacter = oldCharacter;
+            newColor = oldColor;
+            oldCharacter = ' ';
+            oldColor = ConsoleColor.Gray;
         }
 
-        public Fragment_Field(char c, ConsoleColor color, int x, int y)
+        public Fragment_Field(char Character, ConsoleColor color, int x, int y)
         {
-            this.c = c;
-            this.color = color;
+            newCharacter = Character;
+            newColor = color;
             this.x = x;
             this.y = y;
             changes = true;
@@ -32,16 +37,17 @@ namespace Snake
 
         public Fragment_Field(int x, int y) : this(' ', ConsoleColor.Gray, x, y) { }
 
-        public void setCaracter(char c)
+        public void setCaracter(char newCharacter)
         {
-            this.c = c;
-            changes = true;
+            this.newCharacter = newCharacter;
+            changes = !(newCharacter == oldCharacter);
         }
 
         public void setColor(ConsoleColor color)
         {
-            this.color = color;
-            changes = true;
+            newColor = color;
+            
+            changes = !(newColor == oldColor);
         }
 
         public void setPosition(int x, int y)
@@ -58,9 +64,11 @@ namespace Snake
             {
                 
                 Console.CursorVisible = false;
-                Console.ForegroundColor = color;
+                Console.ForegroundColor = newColor;
+                oldColor = newColor;
                 Console.SetCursorPosition(x, y);
-                Console.Write(c);
+                Console.Write(newCharacter);
+                oldCharacter = newCharacter;
                 Console.ForegroundColor = ConsoleColor.Gray;
                 changes = false;
             }
